@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nigga Test</title>
+  <title>NIGGA Test</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,11 +12,10 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #111;
-      /* Background set to Saint Rene Baterbonia image */
       background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
-                        url('https://i.ibb.co/3kXp6Yh/saint-rene-baterbonia.jpg');
+                        url('image_bfdf65.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -31,77 +30,76 @@
     }
 
     .container {
-      background-color: rgba(42, 42, 42, 0.85);
-      backdrop-filter: blur(8px);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      background: rgba(25, 25, 25, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       z-index: 10;
       width: 90%;
-      max-width: 400px;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Music button placed on top of the question */
-    #music-btn {
-      margin-bottom: 20px;
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      background-color: #ff9800;
-      color: #fff;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      transition: background-color 0.2s ease;
-    }
-
-    #music-btn:hover {
-      background-color: #e68a00;
-    }
-
     h1 {
-      font-size: 2.2rem;
-      margin-bottom: 25px;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      letter-spacing: -0.5px;
     }
 
     .btn-group {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 16px;
       width: 100%;
       position: relative;
       min-height: 120px;
     }
 
+    /* Base Modern Button Styles */
     button.action-btn {
-      padding: 12px 30px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50px;
       cursor: pointer;
       width: 100%;
-      max-width: 200px;
+      max-width: 220px;
+      outline: none;
     }
 
+    /* Modern YES Button */
     #yes-btn {
-      background-color: #4CAF50;
-      color: white;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     #yes-btn:hover {
-      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(16, 185, 129, 0.5);
     }
 
+    #yes-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Modern NO Button */
     #no-btn {
-      background-color: #f44336;
-      color: white;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
       z-index: 50;
+      will-change: left, top;
     }
 
     canvas {
@@ -118,16 +116,14 @@
 <body>
 
   <!-- Audio Source -->
-  <audio id="bg-music" loop>
+  <audio id="bg-music" loop preload="auto">
     <source src="https://www.myinstants.com/media/sounds/we-are-charlie-kirk-song.mp3" type="audio/mpeg">
   </audio>
 
   <canvas id="fireworksCanvas"></canvas>
 
   <div class="container" id="quiz-container">
-    <!-- Music Button directly above question -->
-    <button id="music-btn">🎵 MUSIC ON</button>
-    <h1 id="question">Nigga ka ba?</h1>
+    <h1 id="question">NIGGA ka ba?</h1>
     <div class="btn-group">
       <button id="yes-btn" class="action-btn">YES</button>
       <button id="no-btn" class="action-btn">NO</button>
@@ -139,41 +135,26 @@
     const yesBtn = document.getElementById('yes-btn');
     const question = document.getElementById('question');
     const btnGroup = document.querySelector('.btn-group');
-    const musicBtn = document.getElementById('music-btn');
     const audio = document.getElementById('bg-music');
 
-    // If using local image file directly, set background-image in JS as backup
-    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('${'image_bfdf65.jpg'}')`;
-
-    // Toggle Music
-    let isPlaying = false;
-    musicBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        audio.pause();
-        musicBtn.innerText = "🎵 MUSIC ON";
-        isPlaying = false;
-      } else {
-        audio.play().then(() => {
-          musicBtn.innerText = "⏸️ PAUSE MUSIC";
-          isPlaying = true;
-        }).catch(err => console.log("Audio play blocked", err));
-      }
-    });
-
-    // Continuous Bounce Movement Logic for NO Button (Fast 2x Speed)
+    // Ultra-Fast Round Bouncing Movement Logic
     let posX = 0;
     let posY = 0;
-    let speedX = 24;
-    let speedY = 20;
+    let speedX = 28; // Horizontal Speed
+    let speedY = 24; // Vertical Speed
     let isMoving = false;
 
-    function initButtonPos() {
+    function initPosition() {
       const rect = noBtn.getBoundingClientRect();
       posX = rect.left;
       posY = rect.top;
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${posX}px`;
+      noBtn.style.top = `${posY}px`;
+      noBtn.style.margin = '0';
     }
 
-    function moveNoBtn() {
+    function animateNoBtn() {
       if (!isMoving) return;
 
       const btnWidth = noBtn.offsetWidth;
@@ -184,7 +165,7 @@
       posX += speedX;
       posY += speedY;
 
-      // Bounce off screen boundaries
+      // Bounce off boundaries of the viewport
       if (posX <= 0 || posX >= maxX) {
         speedX = -speedX;
         posX = Math.max(0, Math.min(posX, maxX));
@@ -194,36 +175,35 @@
         posY = Math.max(0, Math.min(posY, maxY));
       }
 
-      noBtn.style.position = 'fixed';
       noBtn.style.left = `${posX}px`;
       noBtn.style.top = `${posY}px`;
 
-      requestAnimationFrame(moveNoBtn);
+      requestAnimationFrame(animateNoBtn);
     }
 
-    // Trigger fast continuous movement on mouse hover or touch
-    noBtn.addEventListener('mouseenter', () => {
+    function startSuperFastMove(e) {
+      if (e) e.preventDefault();
       if (!isMoving) {
-        initButtonPos();
+        initPosition();
         isMoving = true;
-        moveNoBtn();
+        animateNoBtn();
       }
-    });
+    }
 
-    noBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (!isMoving) {
-        initButtonPos();
-        isMoving = true;
-        moveNoBtn();
-      }
-    });
+    // Trigger on hovering over or touching the button
+    noBtn.addEventListener('mouseenter', startSuperFastMove);
+    noBtn.addEventListener('touchstart', startSuperFastMove);
 
     // Handle "YES" click
     yesBtn.addEventListener('click', () => {
-      isMoving = false;
-      question.innerText = "You're a certified NIGGER!";
+      isMoving = false; // Stop NO button movement loop
+      noBtn.style.display = 'none'; 
+      question.innerText = "You're a certified NIGGER!!!";
       btnGroup.style.display = 'none';
+
+      // Play music upon picking YES
+      audio.play().catch(err => console.log("Audio play blocked", err));
+
       startFireworks();
     });
 
