@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mamaw Test</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111;
+      /* Background Image: Charlie Kirk Portrait */
+      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                        url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Charlie_Kirk_portrait_%283x4_close_cropped%29.jpg/800px-Charlie_Kirk_portrait_%283x4_close_cropped%29.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #ffffff;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: #ff9800;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    #music-btn:hover {
+      background-color: #e68a00;
+    }
+
+    .container {
+      background-color: rgba(42, 42, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      z-index: 10;
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 25px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      position: relative;
+      min-height: 120px;
+    }
+
+    button.action-btn {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 200px;
+    }
+
+    #yes-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #yes-btn:hover {
+      background-color: #45a049;
+    }
+
+    #no-btn {
+      background-color: #f44336;
+      color: white;
+      z-index: 50;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="music-btn">🎵 MUSIC ON</button>
+
+  <!-- We Are Charlie Kirk Audio Source -->
+  <audio id="bg-music" loop>
+    <source src="https://www.myinstants.com/media/sounds/we-are-charlie-kirk-song.mp3" type="audio/mpeg">
+  </audio>
+
+  <canvas id="fireworksCanvas"></canvas>
+
+  <div class="container" id="quiz-container">
+    <h1 id="question">Mamaw ka ba?</h1>
+    <div class="btn-group">
+      <button id="yes-btn" class="action-btn">YES</button>
+      <button id="no-btn" class="action-btn">NO</button>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('no-btn');
+    const yesBtn = document.getElementById('yes-btn');
+    const question = document.getElementById('question');
+    const btnGroup = document.querySelector('.btn-group');
+    const musicBtn = document.getElementById('music-btn');
+    const audio = document.getElementById('bg-music');
+
+    // Toggle Music
+    let isPlaying = false;
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        musicBtn.innerText = "🎵 MUSIC ON";
+        isPlaying = false;
+      } else {
+        audio.play().then(() => {
+          musicBtn.innerText = "⏸️ PAUSE MUSIC";
+          isPlaying = true;
+        }).catch(err => console.log("Audio play blocked", err));
+      }
+    });
+
+    // Continuous Bounce Movement Logic for NO Button (2x Speed)
+    let posX = 0;
+    let posY = 0;
+    let speedX = 24; // 2x Speed (horizontal)
+    let speedY = 20; // 2x Speed (vertical)
+    let isMoving = false;
+
+    function initButtonPos() {
+      const rect = noBtn.getBoundingClientRect();
+      posX = rect.left;
+      posY = rect.top;
+    }
+
+    function moveNoBtn() {
+      if (!isMoving) return;
+
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const maxX = window.innerWidth - btnWidth;
+      const maxY = window.innerHeight - btnHeight;
+
+      posX += speedX;
+      posY += speedY;
+
+      // Bounce off screen boundaries
+      if (posX <= 0 || posX >= maxX) {
+        speedX = -speedX;
+        posX = Math.max(0, Math.min(posX, maxX));
+      }
+      if (posY <= 0 || posY >= maxY) {
+        speedY = -speedY;
+        posY = Math.max(0, Math.min(posY, maxY));
+      }
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${posX}px`;
+      noBtn.style.top = `${posY}px`;
+
+      requestAnimationFrame(moveNoBtn);
+    }
+
+    // Trigger fast continuous movement on mouse hover or touch
+    noBtn.addEventListener('mouseenter', () => {
+      if (!isMoving) {
+        initButtonPos();
+        isMoving = true;
+        moveNoBtn();
+      }
+    });
+
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (!isMoving) {
+        initButtonPos();
+        isMoving = true;
+        moveNoBtn();
+      }
+    });
+
+    // Handle "YES" click
+    yesBtn.addEventListener('click', () => {
+      isMoving = false;
+      question.innerText = "You're a certified MAMAW!";
+      btnGroup.style.display = 'none';
+      startFireworks();
+    });
+
+    // Fireworks Canvas Animation
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = Math.random() * 3 + 2;
+        this.velocity = {
+          x: (Math.random() - 0.5) * 8,
+          y: (Math.random() - 0.5) * 8
+        };
+        this.alpha = 1;
+        this.friction = 0.98;
+        this.gravity = 0.05;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      update() {
+        this.velocity.x *= this.friction;
+        this.velocity.y *= this.friction;
+        this.velocity.y += this.gravity;
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.alpha -= 0.01;
+      }
+    }
+
+    let particles = [];
+
+    function createFirework(x, y) {
+      const particleCount = 60;
+      const colors = ['#ff4d4d', '#3399ff', '#ffff4d', '#ff66cc', '#4dff88'];
+      
+      for (let i = 0; i < particleCount; i++) {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle, index) => {
+        if (particle.alpha > 0) {
+          particle.update();
+          particle.draw();
+        } else {
+          particles.splice(index, 1);
+        }
+      });
+    }
+
+    function startFireworks() {
+      animate();
+      setInterval(() => {
+        const randomX = Math.random() * canvas.width;
+        const randomY = Math.random() * (canvas.height * 0.6);
+        createFirework(randomX, randomY);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
