@@ -14,9 +14,9 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #111;
-      /* Background Image: Charlie Kirk Portrait */
-      background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
-                        url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Charlie_Kirk_portrait_%283x4_close_cropped%29.jpg/800px-Charlie_Kirk_portrait_%283x4_close_cropped%29.jpg');
+      /* Background set to Saint Rene Baterbonia image */
+      background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), 
+                        url('https://i.ibb.co/3kXp6Yh/saint-rene-baterbonia.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -28,26 +28,6 @@
       align-items: center;
       overflow: hidden;
       text-align: center;
-    }
-
-    #music-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      background-color: #ff9800;
-      color: #fff;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
-
-    #music-btn:hover {
-      background-color: #e68a00;
     }
 
     .container {
@@ -62,6 +42,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    /* Music button placed on top of the question */
+    #music-btn {
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      background-color: #ff9800;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: background-color 0.2s ease;
+    }
+
+    #music-btn:hover {
+      background-color: #e68a00;
     }
 
     h1 {
@@ -118,9 +117,7 @@
 </head>
 <body>
 
-  <button id="music-btn">🎵 MUSIC ON</button>
-
-  <!-- We Are Charlie Kirk Audio Source -->
+  <!-- Audio Source -->
   <audio id="bg-music" loop>
     <source src="https://www.myinstants.com/media/sounds/we-are-charlie-kirk-song.mp3" type="audio/mpeg">
   </audio>
@@ -128,6 +125,8 @@
   <canvas id="fireworksCanvas"></canvas>
 
   <div class="container" id="quiz-container">
+    <!-- Music Button directly above question -->
+    <button id="music-btn">🎵 MUSIC ON</button>
     <h1 id="question">Mamaw ka ba?</h1>
     <div class="btn-group">
       <button id="yes-btn" class="action-btn">YES</button>
@@ -142,6 +141,9 @@
     const btnGroup = document.querySelector('.btn-group');
     const musicBtn = document.getElementById('music-btn');
     const audio = document.getElementById('bg-music');
+
+    // If using local image file directly, set background-image in JS as backup
+    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('${'image_bfdf65.jpg'}')`;
 
     // Toggle Music
     let isPlaying = false;
@@ -158,11 +160,11 @@
       }
     });
 
-    // Continuous Bounce Movement Logic for NO Button (2x Speed)
+    // Continuous Bounce Movement Logic for NO Button (Fast 2x Speed)
     let posX = 0;
     let posY = 0;
-    let speedX = 24; // 2x Speed (horizontal)
-    let speedY = 20; // 2x Speed (vertical)
+    let speedX = 24;
+    let speedY = 20;
     let isMoving = false;
 
     function initButtonPos() {
